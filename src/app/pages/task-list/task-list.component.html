@@ -1,0 +1,20 @@
+<div class="task-container">
+    <h2>Lista de Tarefas</h2>
+    <button (click)="editarTask(this.newTask)">Adicionar</button>
+
+    <ul>
+      <li *ngFor="let task of tasks">
+        <div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+          <p>Status: {{ task.status }}</p>
+          <p>createdAt: {{ task.createdAt }}</p>
+          <p>Deadline: {{ task.deadline }}</p>
+          <button (click)="editarTask(task)">Editar</button>
+          <button (click)="deleteTask(task.id)">Excluir</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <app-modal-adicionar-task [openModal]="openModal" [taskSelected]="taskSelected" (closeModal)="openModal = false" (createTask)="createTask()"]></app-modal-adicionar-task>
