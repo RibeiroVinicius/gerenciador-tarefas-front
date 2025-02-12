@@ -16,8 +16,4 @@ export class LoginService {
   login(user: IUserLogin): Observable<IUser> {
     return this.http.post<IUser>(this.apiUrl, user);
   }
-
-  createUser(user: IUser): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/createUser`, user);
-  }
 }

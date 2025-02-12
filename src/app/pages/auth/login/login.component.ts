@@ -5,6 +5,7 @@ import { IUser } from '../../../interface/IUser';
 import { IUserLogin } from '../../../interface/IUserLogin';
 import { LoginService } from '../../../services/login.service';
 import { catchError } from 'rxjs';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: "app-login",
@@ -22,15 +23,16 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder,
     private loginService: LoginService,
+    private userService: UserService,
     private router: Router) {
     this.loginForm = this.fb.group({
-      email: ["", Validators.nullValidator],
+      username: ["", Validators.nullValidator],
       password: ["", Validators.nullValidator]
     });
 
     this.userForm = this.fb.group({
       id: [0],
-      name: ["", Validators.nullValidator],
+      username: ["", Validators.nullValidator],
       email: ["", Validators.nullValidator],
       password: ["", Validators.nullValidator]
     });
@@ -43,7 +45,7 @@ export class LoginComponent {
 
   initLoginForm() {
     this.loginForm = this.fb.group({
-      email: ["", Validators.nullValidator],
+      username: ["", Validators.nullValidator],
       password: ["", Validators.nullValidator]
     });
   }
@@ -51,7 +53,7 @@ export class LoginComponent {
   initUserForm() {
     this.userForm = this.fb.group({
       id: [0],
-      name: ["", Validators.nullValidator],
+      username: ["", Validators.nullValidator],
       email: ["", Validators.nullValidator],
       password: ["", Validators.nullValidator]
     });
@@ -59,8 +61,8 @@ export class LoginComponent {
   login() {
     this.loading = true;
     const user: IUserLogin = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.SENHA
+      username: this.loginForm.value.username,
+      password: this.loginForm.value.password
     };
 
     if (!this.validarFormLogin()) {
@@ -82,7 +84,7 @@ export class LoginComponent {
 
   validarFormLogin(): boolean {
     let credenciaisValidas = true;
-    if (this.loginForm.get('email')?.value.length == 0) {
+    if (this.loginForm.get('username')?.value.length == 0) {
       alert("INFORME O USUÁRIO");
       credenciaisValidas = false;
     } else if (this.loginForm.get('password')?.value.length == 0) {
@@ -103,7 +105,7 @@ export class LoginComponent {
   onCreateUser() {
     const user: IUser = {
       id: 0,
-      name: this.userForm.get('name')?.value,
+      username: this.userForm.get('username')?.value,
       email: this.userForm.get('email')?.value,
       password: this.userForm.get('password')?.value
     };
@@ -112,7 +114,7 @@ export class LoginComponent {
       this.loading = false;
       return;
     } else {
-      this.loginService.createUser(user)
+      this.userService.createUser(user)
         .pipe(
           catchError(error => {
             this.tratarErroCriacao(error);
@@ -127,7 +129,7 @@ export class LoginComponent {
 
   validarFormUser(): boolean {
     let credenciaisValidas = true;
-    if (this.userForm.get('name')?.value.length == 0) {
+    if (this.userForm.get('username')?.value.length == 0) {
       alert("INFORME O NOME DO USUÁRIO");
       credenciaisValidas = false;
     } else if (this.userForm.get('email')?.value.length == 0) {
@@ -145,6 +147,7 @@ export class LoginComponent {
   }
 
   closeModal() {
+    this.initUserForm();
     this.showModal = false;
   }
 }

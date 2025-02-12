@@ -1,43 +1,145 @@
-.login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 15px;
-  }
-  
-  .btn {
-    width: 100%;
-  }
+/* Fundo estilizado */
+body {
+  background: linear-gradient(to right, #2c3e50, #4ca1af);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-  .modal.show {
-    display: block;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1050;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-  }
-  
-  .modal-dialog {
-    position: relative;
-    margin: 10% auto;
-    max-width: 400px;
-  }
-  
-  
+/* Container do login */
+.login-container {
+  background: slategray;
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+  color: white;
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form-control {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Botão de login */
+.btn-primary {
+  width: 90%;
+  padding: 10px;
+  background: #4ca1af;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #2c3e50;
+}
+
+/* Link para criar conta */
+.btn-link {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(211,211,211,0.5);
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-dialog {
+  background: lightslategray;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Mensagem de erro */
+.error-message {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Estilização da imagem do avatar */
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar img {
+  width: 80px;  /* Ajuste conforme necessário */
+  height: 80px;
+  border-radius: 50%;
+  background-color: #007bff; /* Azul */
+  padding: 10px;
+  object-fit: cover;
+}
+
+
+/* Links "Criar Conta" e "Esqueci minha senha" */
+.extra-links {
+  margin-top: 15px;
+  font-size: 14px;
+}

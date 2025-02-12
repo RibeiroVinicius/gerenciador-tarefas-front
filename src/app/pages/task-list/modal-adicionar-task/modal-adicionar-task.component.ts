@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ETaskStatus, ITask } from '../../../interface/ITask';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IUser } from '../../../interface/IUser';
 
 @Component({
   selector: 'app-modal-adicionar-task',
@@ -10,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ModalAdicionarTaskComponent implements OnInit {
   formTask: FormGroup;
   taskStatusList = Object.values(ETaskStatus);
+  usersList: IUser[] = [];
 
   @Input() openModal: boolean = false;
   @Input() taskSelected: ITask = {} as ITask;
