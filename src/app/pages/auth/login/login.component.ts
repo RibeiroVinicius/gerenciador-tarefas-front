@@ -77,7 +77,10 @@ export class LoginComponent {
             throw error;
           })
         ).subscribe(data => {
-          this.router.navigate(['/task-list']);
+          if (data) {
+            localStorage.setItem('authToken', data.token); // Salva o token no localStorage
+            this.router.navigate(['/task-list']); // Redireciona para a lista de tarefas
+          }
           this.loading = false;
         });
     }

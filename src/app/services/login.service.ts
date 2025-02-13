@@ -13,7 +13,7 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  login(user: IUserLogin): Observable<IUser> {
-    return this.http.post<IUser>(this.apiUrl, user);
+  login(user: IUserLogin): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>('http://localhost:8080/login', user);
   }
 }
