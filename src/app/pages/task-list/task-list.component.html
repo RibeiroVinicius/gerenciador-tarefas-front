@@ -1,5 +1,6 @@
 <div class="task-container">
   <h2>Lista de Tarefas</h2>
+  <button class="logout" (click)="logout()">Logout</button>
 
   <!-- Filtros e ordenação -->
   <div class="filters">
@@ -17,12 +18,12 @@
 
   <!-- Grid de Tarefas -->
   <div class="task-grid">
-    <div *ngFor="let task of filteredTasks | paginate: { itemsPerPage: 5, currentPage: currentPage }" class="task-card">
+    <div *ngFor="let task of filteredTasks | paginate: { itemsPerPage: 3, currentPage: this.currentPage }" class="task-card">
       <h3>{{ task.title }}</h3>
       <p>{{ task.description }}</p>
       <p>Status: <strong>{{ task.status }}</strong></p>
-      <p>Criada em: {{ task.createdAt | date:'short' }}</p>
-      <p>Prazo: {{ task.deadline | date:'short' }}</p>
+      <p>createdOn: {{ task.createdOn | date:'short' }}</p>
+      <p>DeadLine: {{ task.deadline | date:'short' }}</p>
       <button (click)="editarTask(task)">Editar</button>
       <button (click)="deleteTask(task.id)">Excluir</button>
     </div>
@@ -39,5 +40,5 @@
 <app-modal-adicionar-task 
   [openModal]="openModal" 
   [taskSelected]="taskSelected" 
-  (closeModal)="openModal = false">
+  (closeModalEvent)="closeModal()">
 </app-modal-adicionar-task>

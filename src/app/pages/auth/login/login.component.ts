@@ -78,7 +78,8 @@ export class LoginComponent {
           })
         ).subscribe(data => {
           if (data) {
-            localStorage.setItem('authToken', data.token); // Salva o token no localStorage
+            sessionStorage.setItem('authToken', data.acessToken); // Salva o token no localStorage
+            sessionStorage.setItem('user', user.username);
             this.router.navigate(['/task-list']); // Redireciona para a lista de tarefas
           }
           this.loading = false;
@@ -99,7 +100,15 @@ export class LoginComponent {
   }
 
   tratarErros(error: any) {
-    // TODO VERIFICAR OS CÓDIGOS DE ERRO E MOSTRAR MENSAGENS ADEQUADAS
+    if (error.status == 401) {
+      this.errorMessage = "USUÁRIO OU SENHA INCORRETOS";
+    } else if (error.status == 500) {
+      this.errorMessage = "ERRO NO SERVIDOR";
+    } else if (error.status == 0) {
+      this.errorMessage = "CONEXÃO COM O SERVIDOR";
+    } else if (error.status == 404) {
+      this.errorMessage = "NÃO ENCONTRADO";
+    }
   }
 
   tratarErroCriacao(error: any) {

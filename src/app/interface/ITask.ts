@@ -3,13 +3,13 @@ export interface ITask {
     title: string;
     description: string;
     status: ETaskStatus;
-    createdAt: Date;
+    createdOn: Date;
     deadline: Date;
     assignedTo: string;
 }
 
 export enum ETaskStatus {
-    PENDING,
-    IN_PROGRESS,
-    COMPLETED
+    PENDING = 'PENDING',
+    IN_PROGRESS= 'IN_PROGRESS',
+    COMPLETED = 'COMPLETED'
 }

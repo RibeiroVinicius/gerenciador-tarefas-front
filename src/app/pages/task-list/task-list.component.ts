@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ETaskStatus, ITask } from '../../interface/ITask';
 import { TaskService } from '../../services/task.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -11,7 +12,7 @@ import { TaskService } from '../../services/task.service';
 export class TaskListComponent implements OnInit {
   tasks: ITask[] = [];
   filteredTasks: ITask[] = [];
-  taskSelected: ITask = {} as ITask;
+  taskSelected: ITask | null = null;
   openModal: boolean = false;
 
   // Filtros e paginação
@@ -21,15 +22,19 @@ export class TaskListComponent implements OnInit {
   currentPage: number = 1;
   sortColumn: keyof ITask = 'deadline'; // Padrão: ordenar por deadline
   sortDirection: 'asc' | 'desc' = 'asc';
+  itemsPerPage: number = 3;
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService,
+              private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadTasks();
   }
 
   loadTasks(): void {
-    this.taskService.getAllTasks().subscribe((data) => {
+    const user = sessionStorage.getItem('user') ?? "";
+    this.taskService.getAllTasks(user).subscribe((data) => {
       this.tasks = data;
       this.applyFilters();
     });
@@ -37,7 +42,7 @@ export class TaskListComponent implements OnInit {
 
   editarTask(task: ITask): void {
     this.openModal = true;
-    this.taskSelected = { ...task };
+    this.taskSelected = task;
   }
 
   deleteTask(id: number): void {
@@ -47,47 +52,47 @@ export class TaskListComponent implements OnInit {
   }
 
   openTaskModal(): void {
-    this.taskSelected = {} as ITask;
     this.openModal = true;
   }
 
   // Aplicação de filtros e ordenação
   applyFilters(): void {
     let filtered = [...this.tasks];
-
+  
     // Filtrando por título (busca)
     if (this.searchText) {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(this.searchText.toLowerCase())
       );
     }
-
+  
     // Filtrando por status
     if (this.statusFilter) {
       filtered = filtered.filter(task => task.status === ETaskStatus[this.statusFilter as keyof typeof ETaskStatus]);
     }
-
+  
     // Ordenação
     filtered.sort((a, b) => {
       let valueA = a[this.sortColumn];
       let valueB = b[this.sortColumn];
-
+  
       if (this.sortColumn === 'deadline') {
         valueA = new Date(valueA).getTime();
         valueB = new Date(valueB).getTime();
       }
-
+  
       if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
       if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
       return 0;
     });
 
     this.filteredTasks = filtered;
-  }
+  }  
 
   changePage(event: any): void {
-    this.currentPage = event.page;
-    this.applyFilters();
+    this.currentPage = event;
+    const startIndex = (this.currentPage - 1) * 3;
+    this.filteredTasks = this.filteredTasks.slice(startIndex);
   }
 
   // Alternar ordenação ao clicar no botão de ordenar
@@ -99,5 +104,17 @@ export class TaskListComponent implements OnInit {
       this.sortDirection = 'asc';
     }
     this.applyFilters();
+  }
+  
+  closeModal(){
+    this.loadTasks();
+    this.openModal = false;
+    this.taskSelected = null;
+  }
+
+  logout() {
+    this.tasks = [];
+    window.sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

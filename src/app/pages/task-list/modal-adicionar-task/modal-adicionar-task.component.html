@@ -1,40 +1,46 @@
-<div class="modal">
-    <div class="modal-content">
-      <h2 *ngIf="!taskSelected">Criar Nova Tarefa</h2>
-      <h2 *ngIf="taskSelected">Editar Tarefa</h2>
-  
-      <form [formGroup]="formTask" (ngSubmit)="saveTask()">
-        <mat-form-field>
-          <input matInput formControlName="title" placeholder="Título" required />
-          <mat-error *ngIf="formTask.get('title')?.hasError('required')">Título é obrigatório.</mat-error>
-        </mat-form-field>
-      
-        <mat-form-field>
-          <textarea matInput formControlName="description" placeholder="Descrição"></textarea>
-        </mat-form-field>
-      
-        <mat-form-field>
-          <mat-select formControlName="status" placeholder="Status" required>
-            <mat-option value="PENDING">Pendente</mat-option>
-            <mat-option value="IN_PROGRESS">Em Progresso</mat-option>
-            <mat-option value="COMPLETED">Concluída</mat-option>
-          </mat-select>
-        </mat-form-field>
-      
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" formControlName="deadline" placeholder="Data Limite" required />
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="formTask.get('deadline')?.hasError('required')">Data limite é obrigatória.</mat-error>
-          <mat-error *ngIf="formTask.get('deadline')?.hasError('pastDate')">A data limite não pode ser no passado.</mat-error>
-        </mat-form-field>
-      
-        <button mat-raised-button type="submit" [disabled]="formTask.invalid">Salvar</button>
-      </form>
-      
+<div class="modal" [ngClass]="{ 'show': openModal }">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 *ngIf="_taskSelected == null">Criar Nova Tarefa</h2>
+      <h2 *ngIf="_taskSelected !== null">Editar Tarefa</h2>
+      <button type="button" class="close" (click)="closeModal()">×</button>
     </div>
-  </div>
 
-  <mat-error *ngIf="formTask.get('deadline')?.hasError('pastDate')">
-    A data limite não pode ser no passado.
-  </mat-error>
-  
+    <form [formGroup]="formTask" (ngSubmit)="saveTask()">
+
+      <div>
+        <div>
+          <label>Title:</label>
+        </div>
+        <input id="title" type="text" class="form-control" formControlName="title" placeholder=" " required autofocus />
+      </div>
+
+      <div>
+        <div>
+          <label>Description:</label>
+        </div>
+        <textarea id="description" type="text" class="form-control" formControlName="description" placeholder=" "
+          required>
+        </textarea>
+      </div>
+
+      <div>
+        <div>
+          <label>Status:</label>
+        </div>
+        <select formControlName="status">
+          <option *ngFor="let status of taskStatus" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+
+      <div>
+        <div>
+          <label>DeadLine:</label>
+        </div>
+        <input id="deadline" type="date" class="form-control" formControlName="deadline" />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+  </div>
+</div>
