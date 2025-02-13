@@ -4,36 +4,37 @@
       <h2 *ngIf="taskSelected">Editar Tarefa</h2>
   
       <form [formGroup]="formTask" (ngSubmit)="saveTask()">
-        <!-- Título da Tarefa -->
-        <label for="title">Título:</label>
-        <input id="title" type="text" formControlName="title" name="title" required />
-  
-        <!-- Descrição -->
-        <label for="description">Descrição:</label>
-        <textarea id="description" formControlName="description" name="description"></textarea>
-  
-        <!-- Status -->
-        <label for="status">Status:</label>
-        <select id="status" formControlName="task.status" name="status">
-          <option *ngFor="let status of taskStatusList" [value]="status">{{ status }}</option>
-        </select>
-  
-        <!-- Deadline (Data de Entrega) -->
-        <label for="deadline">Data Limite:</label>
-        <input id="deadline" type="date" formControlName="deadline" name="deadline" required />
-  
-        <!-- Atribuído Para -->
-        <label for="assignedTo">Atribuído para:</label>
-        <select id="assignedTo" formControlName="assignedTo" name="assignedTo">
-          <option *ngFor="let user of usersList" [value]="user.id">{{ user.username }}</option>
-        </select>
-  
-        <!-- Botões -->
-        <div class="modal-actions">
-          <button type="submit">Salvar</button>
-          <button type="button" (click)="closeModal()">Cancelar</button>
-        </div>
+        <mat-form-field>
+          <input matInput formControlName="title" placeholder="Título" required />
+          <mat-error *ngIf="formTask.get('title')?.hasError('required')">Título é obrigatório.</mat-error>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <textarea matInput formControlName="description" placeholder="Descrição"></textarea>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <mat-select formControlName="status" placeholder="Status" required>
+            <mat-option value="PENDING">Pendente</mat-option>
+            <mat-option value="IN_PROGRESS">Em Progresso</mat-option>
+            <mat-option value="COMPLETED">Concluída</mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" formControlName="deadline" placeholder="Data Limite" required />
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="formTask.get('deadline')?.hasError('required')">Data limite é obrigatória.</mat-error>
+          <mat-error *ngIf="formTask.get('deadline')?.hasError('pastDate')">A data limite não pode ser no passado.</mat-error>
+        </mat-form-field>
+      
+        <button mat-raised-button type="submit" [disabled]="formTask.invalid">Salvar</button>
       </form>
+      
     </div>
   </div>
+
+  <mat-error *ngIf="formTask.get('deadline')?.hasError('pastDate')">
+    A data limite não pode ser no passado.
+  </mat-error>
   

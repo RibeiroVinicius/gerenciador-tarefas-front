@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ETaskStatus, ITask } from '../../../interface/ITask';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { IUser } from '../../../interface/IUser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TaskService } from '../../../services/task.service';
 
 @Component({
   selector: 'app-modal-adicionar-task',
   templateUrl: './modal-adicionar-task.component.html',
-  styleUrl: './modal-adicionar-task.component.scss',
+  styleUrls: ['./modal-adicionar-task.component.scss'],
+  standalone: false
 })
 export class ModalAdicionarTaskComponent implements OnInit {
   formTask: FormGroup;
@@ -22,7 +25,10 @@ export class ModalAdicionarTaskComponent implements OnInit {
   OnInit() {
     this.initFormTask();
   }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private taskService: TaskService,
+    private snackBar: MatSnackBar
+  ) {
     this.formTask = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -46,21 +52,29 @@ export class ModalAdicionarTaskComponent implements OnInit {
   }
 
   saveTask() {
-    const task: ITask = {
-      id: 0,
-      title: this.formTask.get('title')?.value,
-      description: this.formTask.get('description')?.value,
-      status: this.formTask.get('status')?.value,
-      deadline: this.formTask.get('deadline')?.value,
-      createdAt: new Date(Date.now()),
-      assignedTo: this.formTask.get('assignedTo')?.value
-    };
-
-    this.createTaskEvent.emit(task);
+    if (this.formTask.valid) {
+      const task: ITask = this.formTask.value;
+      this.taskService.createTask(task).subscribe(
+        () => {
+          this.snackBar.open('Tarefa criada com sucesso!', 'Fechar', { duration: 3000 });
+        },
+        (error) => {
+          this.snackBar.open('Erro ao criar tarefa.', 'Fechar', { duration: 3000 });
+        }
+      );
+    }
   }
 
   closeModal() {
     this.openModal = false;
     this.closeModalEvent.emit();
+  }
+
+  futureDateValidator(control: FormControl): ValidationErrors | null {
+    const selectedDate = new Date(control.value);
+    if (selectedDate < new Date()) {
+      return { pastDate: true };
+    }
+    return null;
   }
 }

@@ -9,6 +9,8 @@ import { TaskListComponent } from "./pages/task-list/task-list.component";
 import { ModalAdicionarTaskComponent } from "./pages/task-list/modal-adicionar-task/modal-adicionar-task.component";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule } from "@angular/common/http";
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, TaskListComponent, ModalAdicionarTaskComponent],
@@ -16,6 +18,7 @@ import { HttpClientModule } from "@angular/common/http";
   exports: [AppComponent],
   imports: [
     FormsModule,
+    NgxPaginationModule,
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
